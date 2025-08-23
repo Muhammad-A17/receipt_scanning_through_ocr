@@ -7,12 +7,7 @@ from ocr_bigger_upgrade import EnhancedReceiptParser
 import tempfile
 
 
-'''
-edges = cv2.Canny(np.array(image), 100, 200)
-tab1, tab2 = st.tabs(["Detected edges", "Original"])
-tab1.image(edges, use_column_width=True)
-tab2.image(image, use_column_width=True)
-'''
+
 
 
 def interf():
@@ -29,7 +24,7 @@ def interf():
             tmp_path = tmp.name
         with st.spinner("Processing..."):
             parser = EnhancedReceiptParser()
-            receipt_data = parser.process_receipt(tmp_path)
+            receipt_data = parser.processing_receipt(tmp_path)
         st.success("Done")
 
         data = {k: v for k, v in receipt_data.__dict__.items()
