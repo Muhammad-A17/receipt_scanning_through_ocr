@@ -1,0 +1,12 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Run simple_ocr_test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/simple_ocr_test.py",
+            "console": "integratedTerminal"
+        }
+    ]
+}

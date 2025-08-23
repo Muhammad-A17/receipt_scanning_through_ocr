@@ -1,0 +1,19 @@
+PaddleOCR(...) → Creates an OCR engine object.
+
+use_angle_cls=True → Detects rotated text and corrects its angle.
+
+lang='en' → English language OCR.
+
+show_log=False → Hides verbose logs from PaddleOCR.
+
+ocr.ocr(image_path, cls=True) → Runs OCR on the image.
+
+cls=True means use the angle classifier to handle rotated text.
+
+The output is a list of detected text regions with bounding boxes and confidence scores.
+
+Loops through each detected text line.
+
+line[1][0] → the actual text string.
+
+line[1][1] → confidence value.
