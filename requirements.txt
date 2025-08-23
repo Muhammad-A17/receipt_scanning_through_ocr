@@ -1,0 +1,10 @@
+streamlit==1.28.1
+paddlepaddle==2.5.2 
+paddleocr==2.7.0.3
+opencv-python
+Pillow==10.0.1
+numpy==1.24.3
+pymupdf==1.24.9
+blis==0.7.9 
+spacy==3.7.2 
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1.tar.gz

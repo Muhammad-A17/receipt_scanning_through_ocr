@@ -1,6 +1,0 @@
-streamlit==1.28.1
-paddlepaddle==2.5.2 -i https://mirror.baidu.com/pypi/simple
-paddleocr==2.7.0.3
-opencv-python-headless==4.8.1.78
-Pillow==10.0.1
-numpy==1.24.3
