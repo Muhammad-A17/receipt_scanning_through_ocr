@@ -309,7 +309,7 @@ class EnhancedReceiptParser:
 
 
         if not amounts.get('total'):
-            amounts.update(self._extract_amounts_contextual(all_amounts,full_text))
+            amounts.update(self._extract_amounts_contextual(all_amounts,full_text) or {})
         
         return amounts
     
@@ -394,7 +394,7 @@ class EnhancedReceiptParser:
         if not amounts.get('total') and sorted_amounts:
             amounts['total']=sorted_amounts[0]['amount']
 
-        return amount
+        return amounts
     
     def extract_payment_info(self,full_text:str)->Dict:
         payment_info={}
