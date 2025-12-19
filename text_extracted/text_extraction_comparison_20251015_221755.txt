@@ -1,0 +1,298 @@
+TEXT EXTRACTION COMPARISON
+==================================================
+
+Version              Text Lines   Characters   Avg Conf  
+------------------------------------------------------------
+original             23           226          0.980     
+contrast_enhanced    23           183          0.686     
+clahe                22           224          0.974     
+sharpened            22           217          0.942     
+denoised             22           226          0.980     
+binary_otsu          22           165          0.662     
+morphological        22           226          0.977     
+bilateral_filtered   22           215          0.926     
+edge_preserved       22           225          0.960     
+adaptive             16           178          0.724     
+
+DETAILED TEXT EXTRACTION (All Versions)
+============================================================
+
+ORIGINAL (23 lines, 226 chars, conf: 0.980)
+--------------------------------------------------
+   1. [0.999] EPIC STEAKHOUSE
+   2. [0.957] 369 THE EMBARCADERO
+   3. [0.869] SAN FRANCISOO, CA 94Y05
+   4. [0.999] RECEIPT
+   5. [0.996] 2 FILET MIGNON
+   6. [0.931] $98.00
+   7. [0.936] 1
+   8. [0.995] RIB EYE
+   9. [0.997] 1 CAESAR SALAD
+  10. [0.998] $52.00
+  11. [0.997] 1 CREAMED SPINACH
+  12. [0.990] $14.50
+  13. [0.967] 1 BAKED POTATO
+  14. [0.927] $71.00
+  15. [0.998] $9.50
+  16. [1.000] SUBTOTAL
+  17. [0.995] $185.00
+  18. [0.999] TAX
+  19. [0.998] TIP
+  20. [0.991] 17.02
+  21. [1.000] $75.00
+  22. [1.000] TOTAL
+  23. [1.000] $277.02
+
+Full Text (original):
+'EPIC STEAKHOUSE 369 THE EMBARCADERO SAN FRANCISOO, CA 94Y05 RECEIPT 2 FILET MIGNON $98.00 1 RIB EYE 1 CAESAR SALAD $52.00 1 CREAMED SPINACH $14.50 1 BAKED POTATO $71.00 $9.50 SUBTOTAL $185.00 TAX TIP 17.02 $75.00 TOTAL $277.02'
+
+CONTRAST_ENHANCED (23 lines, 183 chars, conf: 0.686)
+--------------------------------------------------
+   1. [1.000] $277.02
+   2. [1.000] TOTAL
+   3. [0.996] $75.00
+   4. [0.402] dIl
+   5. [0.519] 222
+   6. [0.740] 00'S81$
+   7. [0.999] TAX
+   8. [0.370] TEOIINS
+   9. [0.699] 09165
+  10. [0.798] 00148
+  11. [0.319] BAAAAE AAEI
+  12. [0.390] OSV1S
+  13. [0.959] CREAMEDSPINACH
+  14. [0.438] OA AA
+  15. [0.924] 0025$
+  16. [0.721] 00-868
+  17. [0.746] 3.3 918
+  18. [0.388] NNI 13TN
+  19. [0.877] 2
+  20. [0.453] REEEET
+  21. [0.576] 9076 V. 00036 1S
+  22. [0.474] 000Y60 E 16
+  23. [0.989] EPIC STEAKHOUSE
+
+Full Text (contrast_enhanced):
+'$277.02 TOTAL $75.00 dIl 222 00'S81$ TAX TEOIINS 09165 00148 BAAAAE AAEI OSV1S CREAMEDSPINACH OA AA 0025$ 00-868 3.3 918 NNI 13TN 2 REEEET 9076 V. 00036 1S 000Y60 E 16 EPIC STEAKHOUSE'
+
+CLAHE (22 lines, 224 chars, conf: 0.974)
+--------------------------------------------------
+   1. [0.999] EPIC STEAKHOUSE
+   2. [0.902] 368 THE EMBARCADERO
+   3. [0.847] SAN FRANCISOO, CA 94906
+   4. [1.000] RECEIPT
+   5. [0.992] 2 FILET MIGNON
+   6. [0.993] 1 RIB EYE
+   7. [0.983] $98.00
+   8. [0.961] 1 CAESAR SALAD
+   9. [0.998] $52.00
+  10. [0.983] 1 CREAMED SPINACH
+  11. [0.939] $14.50
+  12. [0.913] $71.00
+  13. [0.998] BAKED POTATO
+  14. [0.995] $9.50
+  15. [1.000] SUBTOTAL
+  16. [0.999] TAX
+  17. [0.953] $185.00
+  18. [0.997] 17.02
+  19. [0.991] TIP
+  20. [0.997] $75.00
+  21. [1.000] TOTAL
+  22. [0.999] $277.02
+
+Full Text (clahe):
+'EPIC STEAKHOUSE 368 THE EMBARCADERO SAN FRANCISOO, CA 94906 RECEIPT 2 FILET MIGNON 1 RIB EYE $98.00 1 CAESAR SALAD $52.00 1 CREAMED SPINACH $14.50 $71.00 BAKED POTATO $9.50 SUBTOTAL TAX $185.00 17.02 TIP $75.00 TOTAL $277.02'
+
+SHARPENED (22 lines, 217 chars, conf: 0.942)
+--------------------------------------------------
+   1. [0.994] EPIC STEAKHOUSE
+   2. [0.621] CH34YN43 341 EIGC
+   3. [0.942] SAN FRANCISOO, CA MICS
+   4. [0.999] RECEIPT
+   5. [0.917] 2FILET MIONON
+   6. [0.879] $99.00
+   7. [0.965] RIB EYE
+   8. [0.995] CAESAR SALAD
+   9. [0.972] $52.00
+  10. [0.906] CREAMED SPINAOI
+  11. [0.908] $14.50
+  12. [0.885] 1 BAXKED POTATO
+  13. [0.952] $71.00
+  14. [0.848] $2.50
+  15. [0.998] SUBTOTAL
+  16. [0.997] $185.00
+  17. [0.999] TAX
+  18. [0.996] 17.02
+  19. [0.943] TIP
+  20. [0.999] $75.00
+  21. [1.000] TOTAL
+  22. [1.000] $277.02
+
+Full Text (sharpened):
+'EPIC STEAKHOUSE CH34YN43 341 EIGC SAN FRANCISOO, CA MICS RECEIPT 2FILET MIONON $99.00 RIB EYE CAESAR SALAD $52.00 CREAMED SPINAOI $14.50 1 BAXKED POTATO $71.00 $2.50 SUBTOTAL $185.00 TAX 17.02 TIP $75.00 TOTAL $277.02'
+
+DENOISED (22 lines, 226 chars, conf: 0.980)
+--------------------------------------------------
+   1. [0.999] EPIC STEAKHOUSE
+   2. [0.911] 369 THE EMBARCADERO
+   3. [0.904] SAN FRANCISOO, CA 94Y06
+   4. [0.999] RECEIPT
+   5. [0.968] 2 FILET MIGNON
+   6. [0.938] 1 RIB EYE
+   7. [0.982] $98.00
+   8. [0.997] 1 CAESAR SALAD
+   9. [0.998] $52.00
+  10. [0.969] 1 CREAMED SPINACH
+  11. [0.998] $14.50
+  12. [0.977] 1 BAKED POTATO
+  13. [0.932] $71.00
+  14. [0.997] $9.50
+  15. [0.999] SUBTOTAL
+  16. [0.999] TAX
+  17. [0.986] $185.00
+  18. [0.996] TIP
+  19. [0.999] 17.02
+  20. [1.000] $75.00
+  21. [1.000] TOTAL
+  22. [1.000] $277.02
+
+Full Text (denoised):
+'EPIC STEAKHOUSE 369 THE EMBARCADERO SAN FRANCISOO, CA 94Y06 RECEIPT 2 FILET MIGNON 1 RIB EYE $98.00 1 CAESAR SALAD $52.00 1 CREAMED SPINACH $14.50 1 BAKED POTATO $71.00 $9.50 SUBTOTAL TAX $185.00 TIP 17.02 $75.00 TOTAL $277.02'
+
+BINARY_OTSU (22 lines, 165 chars, conf: 0.662)
+--------------------------------------------------
+   1. [0.863] FPIC STEARHDUSE
+   2. [0.373] 30 Mo
+   3. [0.422] 5A
+   4. [0.849] RECEIFT
+   5. [0.475] 2 577 m3A04
+   6. [0.339] 6S00
+   7. [0.589] : H3 EY
+   8. [0.618] SEMC2
+   9. [0.304] DW S.
+  10. [0.709] 54.50
+  11. [0.605] ; CREAnl! SPSXNDs
+  12. [0.326] $2e3
+  13. [0.486] CW4 13W99:
+  14. [0.963] $2.50
+  15. [0.747] SHBTM
+  16. [0.614] $1a5.01:
+  17. [0.990] TAX
+  18. [0.798] 17.62
+  19. [0.798] 1EP
+  20. [0.699] $'5 0G
+  21. [0.992] TOTAL
+  22. [0.999] $277.02
+
+Full Text (binary_otsu):
+'FPIC STEARHDUSE 30 Mo 5A RECEIFT 2 577 m3A04 6S00 : H3 EY SEMC2 DW S. 54.50 ; CREAnl! SPSXNDs $2e3 CW4 13W99: $2.50 SHBTM $1a5.01: TAX 17.62 1EP $'5 0G TOTAL $277.02'
+
+MORPHOLOGICAL (22 lines, 226 chars, conf: 0.977)
+--------------------------------------------------
+   1. [0.999] EPIC STEAKHOUSE
+   2. [0.957] 369 THE EMBARCADERO
+   3. [0.885] SAN FRANCISOO, CA B4Y05
+   4. [0.999] RECEIPT
+   5. [0.970] 2 FILET MIGNON
+   6. [0.902] $98.00
+   7. [0.935] 1 RIB EYE
+   8. [0.986] 1 CAESAR SALAD
+   9. [0.999] $52.00
+  10. [0.990] 1 CREAMED SPINACH
+  11. [0.987] $14.50
+  12. [0.979] 1 BAKED POTATO
+  13. [0.922] $71.00
+  14. [0.998] $9.50
+  15. [0.999] SUBTOTAL
+  16. [0.996] $185.00
+  17. [0.999] TAX
+  18. [0.996] TIP
+  19. [0.992] 17.02
+  20. [1.000] $75.00
+  21. [1.000] TOTAL
+  22. [1.000] $277.02
+
+Full Text (morphological):
+'EPIC STEAKHOUSE 369 THE EMBARCADERO SAN FRANCISOO, CA B4Y05 RECEIPT 2 FILET MIGNON $98.00 1 RIB EYE 1 CAESAR SALAD $52.00 1 CREAMED SPINACH $14.50 1 BAKED POTATO $71.00 $9.50 SUBTOTAL $185.00 TAX TIP 17.02 $75.00 TOTAL $277.02'
+
+BILATERAL_FILTERED (22 lines, 215 chars, conf: 0.926)
+--------------------------------------------------
+   1. [0.991] EPIC STEAKHOUSE
+   2. [0.573] SAN FRAMISOO . S4V0E
+   3. [0.812] 989 THE CHBARCADBR
+   4. [0.999] RECEIPT
+   5. [0.951] 2 FILET MIGNON
+   6. [0.901] RIB EVE
+   7. [0.945] $98.00
+   8. [0.943] OAESAR SALAD
+   9. [0.956] $62.00
+  10. [0.915] OREAMED SPTNACH
+  11. [0.880] $14.50
+  12. [0.937]  BAKED POTATO
+  13. [0.876] 811.00
+  14. [0.903] $9.50
+  15. [0.998] SUBTOTAL
+  16. [0.999] TAX
+  17. [0.975] $186.00
+  18. [0.875] TIP
+  19. [0.986] 17.02
+  20. [0.968] $76.00
+  21. [1.000] TOTAL
+  22. [1.000] $277.02
+
+Full Text (bilateral_filtered):
+'EPIC STEAKHOUSE SAN FRAMISOO . S4V0E 989 THE CHBARCADBR RECEIPT 2 FILET MIGNON RIB EVE $98.00 OAESAR SALAD $62.00 OREAMED SPTNACH $14.50  BAKED POTATO 811.00 $9.50 SUBTOTAL TAX $186.00 TIP 17.02 $76.00 TOTAL $277.02'
+
+EDGE_PRESERVED (22 lines, 225 chars, conf: 0.960)
+--------------------------------------------------
+   1. [0.998] EPIC STEAKHOUSE
+   2. [0.814] 369 THE EMEARCADERU
+   3. [0.775] SAN FRANCISOO. CA 34YB
+   4. [0.999] RECEIPT
+   5. [0.993] 2 FILET MIGNON
+   6. [0.950] $98.00
+   7. [0.893] 1 AIB EYE
+   8. [0.999] $52.00
+   9. [0.997] 1 CAESAR SALAD
+  10. [0.990] $14.50
+  11. [0.996] 1 CREAMED SPINACH
+  12. [0.946] 1 BAKED POTATO
+  13. [0.848] $71.00
+  14. [0.997] $9.50
+  15. [0.999] SUBTOTAL
+  16. [0.998] TAX
+  17. [0.993] $185.00
+  18. [0.940] 17.02
+  19. [0.994] TIP
+  20. [0.999] $75.00
+  21. [1.000] TOTAL
+  22. [1.000] $277.02
+
+Full Text (edge_preserved):
+'EPIC STEAKHOUSE 369 THE EMEARCADERU SAN FRANCISOO. CA 34YB RECEIPT 2 FILET MIGNON $98.00 1 AIB EYE $52.00 1 CAESAR SALAD $14.50 1 CREAMED SPINACH 1 BAKED POTATO $71.00 $9.50 SUBTOTAL TAX $185.00 17.02 TIP $75.00 TOTAL $277.02'
+
+ADAPTIVE (16 lines, 178 chars, conf: 0.724)
+--------------------------------------------------
+   1. [0.338] A.AMPA
+   2. [0.960] EPIC STEAKHOUSE
+   3. [0.662] SA TE PH
+   4. [0.565] 549 ERU503, CA 3498
+   5. [0.261] EE
+   6. [0.689] ESCET MISOMON.
+   7. [0.345] 818
+   8. [0.980] $38.00
+   9. [0.960] CAESAR SALAD
+  10. [0.841] 8$14.50
+  11. [0.844] ,$52.00
+  12. [0.877] CREAHED'SPINACH
+  13. [0.765] BAKEO POTATC1L53.50
+  14. [0.640] ($75.00
+  15. [0.986] SUBTOTAL
+  16. [0.879] TOTAL72Y$277.02
+
+Full Text (adaptive):
+'A.AMPA EPIC STEAKHOUSE SA TE PH 549 ERU503, CA 3498 EE ESCET MISOMON. 818 $38.00 CAESAR SALAD 8$14.50 ,$52.00 CREAHED'SPINACH BAKEO POTATC1L53.50 ($75.00 SUBTOTAL TOTAL72Y$277.02'
+
+MOST TEXT EXTRACTED: original
+   23 lines, 226 characters
+   Average confidence: 0.980

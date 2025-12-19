@@ -1,0 +1,46 @@
+{
+  "merchant_name": "(410) 690-9061",
+  "merchant_address": "MD",
+  "merchant_phone": "8080048000",
+  "merchant_email": null,
+  "date": "116342780 03-15-23",
+  "time": "16:21:06",
+  "transaction_id": null,
+  "receipt_number": "116342780",
+  "tip": 5.329070518200751e-15,
+  "tax": 2.51,
+  "sub_total": 41.76,
+  "total": 44.27,
+  "discount": null,
+  "items": [
+    {
+      "name": "Ml Contr Ch",
+      "quantity": 3,
+      "price": 41.76,
+      "total": 125.28,
+      "confidence": 0.9971079230308533
+    }
+  ],
+  "payment_method": "debit",
+  "card_type": null,
+  "card_last_four": "2616",
+  "category": "retail",
+  "tax_rate": 6.01,
+  "currency": "USD",
+  "confidence_scores": {
+    "ocr_quality": 0.9436539358562894,
+    "merchant": 0.9933842420578003,
+    "items_extracted": 1,
+    "layout_confidence": 0.8388888888888889,
+    "receipt_type": "retail",
+    "validation_score": 0.8,
+    "validations_passed": "4/5",
+    "validation_details": {
+      "financial_consistency": true,
+      "tax_rate_consistency": true,
+      "merchant_confidence": true,
+      "date_format": true,
+      "items_consistency": false
+    }
+  }
+}
