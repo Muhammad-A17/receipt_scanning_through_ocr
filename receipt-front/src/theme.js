@@ -11,8 +11,8 @@ export const theme = {
       lg: 'py-4 px-8 text-lg',
     },
     layouts: {
-      page: 'min-h-screen bg-black flex items-center justify-center p-4',
-      card: 'bg-gray rounded-lg shadow-md p-6 max-w-md w-full',
-      button: 'text-white font-semibold rounded-lg transition-colors duration-200',
+      page: 'min-h-screen bg-gray-50 dark:bg-gray-900',
+      card: 'bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700',
+      button: 'font-semibold rounded-lg transition-all duration-200',
     }
   };

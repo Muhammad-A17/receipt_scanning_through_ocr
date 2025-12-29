@@ -1,8 +1,124 @@
-node_modules/
-node_modules
-node_modules
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Virtualenvs
-venv*/
-**/venv*/
-receipt_scanning_through_ocr/venv39/
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media
+/staticfiles
+/static
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# React / Vite
+receipt-front/dist/
+receipt-front/.vite/
+receipt-front/build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Test images and temporary files
+*.jpg
+*.jpeg
+*.png
+!receipt-front/public/*.svg
+*.gif
+*.bmp
+
+# Logs
+*.log
+logs/
+receipt_parser.log
+text_extraction_comparison_*.txt
+
+# OS
+Thumbs.db
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# Coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+
+# Receipt images (user uploaded)
+receipts/lo_*.jpg
+receipts/r*.jpg
+lo.jpg
+
+# Documentation builds
+docs/_build/
+
+# Local configuration
+local_settings.py
+settings_local.py

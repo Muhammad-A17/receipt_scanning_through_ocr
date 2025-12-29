@@ -1,35 +1,18 @@
-from rest_framework import generics,status#generic is an API to view classes
-from rest_framework.response import Response#sends json responses to requests
-from rest_framework.parsers import MultiPartParser,FormParser#handles file uploads
-from rest_framework.utils import serializer_helpers
-from .models import Receipt,UserProfileReg# Receipt is the db model, UserProfileReg is the user registration model
-from .serializers import ReceiptSerializer,UserProfileRegSerializer#serializer converts python objects to json
-from decimal import Decimal,InvalidOperation
-import os
-import sys
-from datetime import datetime
-# Import OCR parser from package
-from receipt_scanning_through_ocr.ocr_more_lat import EnhancedReceiptParser
+"""
+API Views for Receipt Scanner Application
+Centralized API endpoints using service layer
+"""
+from rest_framework import generics, status
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
+import logging
 
-def to_decimal_or_none(v):
-    if v in (None, '', 'NaN', 'Infinity', '-Infinity'):
-        return None
-    try:
-        return Decimal(str(v))
-    except (InvalidOperation, ValueError, TypeError):
-        return None
+from .models import Receipt, UserProfileReg
+from .serializers import ReceiptSerializer, UserProfileRegSerializer
+from .services.ocr_service import get_ocr_service
+from .services.receipt_service import ReceiptService
 
-def date_handler(date_str):
-    if not date_str or date_str in ('None','','NaN'):
-        return None
-    try:
-        if len(date_str) == 10 and date_str.count('-') == 2:
-            datetime.strptime(date_str, '%Y-%m-%d')
-            return date_str
-        else:
-            return None
-    except (ValueError, AttributeError):
-        return None
+logger = logging.getLogger(__name__)
 
 
 
@@ -38,9 +21,27 @@ class ReceiptListAPIView(generics.ListCreateAPIView):#ListCreateAPIView handles 
     queryset = Receipt.objects.all()#the db records that will be retrieved
     serializer_class = ReceiptSerializer#the serializer class that will be used to convert the db records to json
 
-class ReceiptDetailAPIView(generics.RetrieveAPIView):#RetrieveAPIView handles GET requests for a single record, gets one specific receipt by id
+class ReceiptDetailAPIView(generics.RetrieveUpdateDestroyAPIView):#RetrieveUpdateDestroyAPIView handles GET, PUT, PATCH, and DELETE requests
     queryset = Receipt.objects.all()
-    serializer_class=ReceiptSerializer
+    serializer_class = ReceiptSerializer
+    
+    def destroy(self, request, *args, **kwargs):
+        """Delete a receipt"""
+        try:
+            receipt = self.get_object()
+            receipt_id = receipt.id
+            receipt.delete()
+            logger.info(f"Receipt {receipt_id} deleted successfully")
+            return Response(
+                {'message': f'Receipt {receipt_id} deleted successfully'}, 
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            logger.error(f"Error deleting receipt: {str(e)}")
+            return Response(
+                {'error': f'Delete failed: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class ReceiptUploadAPIView(generics.CreateAPIView):
     """Upload image only - no OCR processing yet"""
@@ -49,22 +50,29 @@ class ReceiptUploadAPIView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def create(self, request, *args, **kwargs):
-        # Only accept image upload
+        """Handle receipt image upload"""
         if 'image' not in request.FILES:
-            return Response({'error': 'No image provided'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {'error': 'No image provided'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
-        # Create receipt with just the image
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        receipt = serializer.save()
-        
-        # Return receipt with just image info (not processed yet)
-        return Response({
-            'id': receipt.id,
-            'image': receipt.image.url,
-            'processed': False,
-            'message': 'Image uploaded successfully. Click "Process Receipt" to extract data.'
-        }, status=status.HTTP_201_CREATED)
+        try:
+            # Use service to create receipt
+            receipt = ReceiptService.create_receipt_from_upload(request.FILES['image'])
+            
+            return Response({
+                'id': receipt.id,
+                'image': receipt.image.url,
+                'processed': False,
+                'message': 'Image uploaded successfully. Click "Process Receipt" to extract data.'
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(f"Error uploading receipt: {str(e)}")
+            return Response(
+                {'error': f'Upload failed: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class ReceiptProcessAPIView(generics.CreateAPIView):
     """Process receipt with OCR - called when user clicks "Process" button"""
@@ -72,94 +80,143 @@ class ReceiptProcessAPIView(generics.CreateAPIView):
     serializer_class = ReceiptSerializer
 
     def create(self, request, *args, **kwargs):
+        """Process receipt image with OCR"""
         receipt = self.get_object()
         
-        if receipt.processed:
-            return Response({'message': 'Receipt already processed'}, status=status.HTTP_200_OK)
+        # Validate receipt can be processed
+        is_valid, error_message = ReceiptService.validate_receipt_for_processing(receipt)
+        if not is_valid:
+            return Response(
+                {'message': error_message}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         try:
-            # Process with OCR
-            print(f"Image path: {receipt.image.path}")
-            print(f"Image exists: {os.path.exists(receipt.image.path)}")
+            # Get OCR service and process image
+            ocr_service = get_ocr_service()
             image_path = receipt.image.path
-            parser = EnhancedReceiptParser()
-            print("Parser created successfully")
-            receipt_data = parser.processing_receipt(image_path)
-            print(f"OCR result: {receipt_data}")
+            
+            logger.info(f"Processing receipt {receipt.id} with image: {image_path}")
+            
+            # Process with OCR
+            receipt_data = ocr_service.process_receipt_image(image_path)
             
             # Update receipt with extracted data
-            receipt.merchant_name = receipt_data.merchant_name
-            receipt.merchant_address = receipt_data.merchant_address
-            receipt.merchant_phone = receipt_data.merchant_phone
-            receipt.merchant_email = receipt_data.merchant_email
-            receipt.date = date_handler(receipt_data.date)
-            receipt.time = receipt_data.time
-            receipt.transaction_id = receipt_data.transaction_id
-            receipt.receipt_number = receipt_data.receipt_number
-            receipt.tip = to_decimal_or_none(receipt_data.tip)
-            receipt.tax = to_decimal_or_none(receipt_data.tax)
-            receipt.sub_total = to_decimal_or_none(receipt_data.sub_total)
-            receipt.total = to_decimal_or_none(receipt_data.total)
-            receipt.discount = to_decimal_or_none(receipt_data.discount)
-            receipt.items = receipt_data.items
-            receipt.payment_method = receipt_data.payment_method
-            receipt.card_type = receipt_data.card_type
-            receipt.card_last_four = receipt_data.card_last_four
-            receipt.category = receipt_data.category
-            receipt.tax_rate = to_decimal_or_none(receipt_data.tax_rate)
-            receipt.currency = receipt_data.currency
-            receipt.confidence_scores = receipt_data.confidence_scores
-            receipt.processed = True
-            receipt.save()
+            receipt = ocr_service.update_receipt_with_ocr_data(receipt, receipt_data)
+            
+            logger.info(f"Receipt {receipt.id} processed successfully")
+            return Response(
+                ReceiptSerializer(receipt).data, 
+                status=status.HTTP_200_OK
+            )
 
-            return Response(ReceiptSerializer(receipt).data, status=status.HTTP_200_OK)
-
+        except FileNotFoundError as e:
+            logger.error(f"Image file not found: {str(e)}")
+            return Response(
+                {'error': f'Image file not found: {str(e)}'}, 
+                status=status.HTTP_404_NOT_FOUND
+            )
         except Exception as e:
-            print(f"Error: {e}")
-            return Response({'error': f'OCR processing failed: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            logger.error(f"OCR processing failed for receipt {receipt.id}: {str(e)}")
+            return Response(
+                {'error': f'OCR processing failed: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class ReceiptEditAPIView(generics.UpdateAPIView):
+    """Edit processed receipt data"""
     queryset = Receipt.objects.all()
-    serializer_class=ReceiptSerializer
+    serializer_class = ReceiptSerializer
 
     def update(self, request, *args, **kwargs):
-        receipt=self.get_object()
+        """Update receipt fields"""
+        receipt = self.get_object()
 
-        if not receipt.processed:
-            return Response({'error': 'Receipt must be processed first, and it hasnt been'},status=status.HTTP_400_BAD_REQUEST)
-        receipt.merchant_name = request.data.get('merchant_name', receipt.merchant_name)
-        receipt.merchant_address = request.data.get('merchant_address', receipt.merchant_address)
-        receipt.merchant_phone = request.data.get('merchant_phone', receipt.merchant_phone)
-        receipt.merchant_email = request.data.get('merchant_email', receipt.merchant_email)
-        receipt.date = request.data.get('date', receipt.date)
-        receipt.time = request.data.get('time', receipt.time)
-        receipt.transaction_id = request.data.get('transaction_id', receipt.transaction_id)
-        receipt.receipt_number = request.data.get('receipt_number', receipt.receipt_number)
-        receipt.tip = to_decimal_or_none(request.data.get('tip', receipt.tip))
-        receipt.tax = to_decimal_or_none(request.data.get('tax', receipt.tax))
-        receipt.sub_total = to_decimal_or_none(request.data.get('sub_total', receipt.sub_total))
-        receipt.total = to_decimal_or_none(request.data.get('total', receipt.total))
-        receipt.discount = to_decimal_or_none(request.data.get('discount', receipt.discount))
-        receipt.items = request.data.get('items', receipt.items)
-        receipt.payment_method = request.data.get('payment_method', receipt.payment_method)
-        receipt.card_type = request.data.get('card_type', receipt.card_type)
-        receipt.card_last_four = request.data.get('card_last_four', receipt.card_last_four)
-        receipt.category = request.data.get('category', receipt.category)
-        receipt.tax_rate = to_decimal_or_none(request.data.get('tax_rate', receipt.tax_rate))
-        receipt.currency = request.data.get('currency', receipt.currency)
-
-        receipt.save()
-        return Response(ReceiptSerializer(receipt).data, status=status.HTTP_200_OK)
-
-    
-class RegisterAPIview(generics.CreateAPIView):
-    queryset=UserProfileReg.objects.all()
-    serializer_class=UserProfileRegSerializer
-    
-
-    
-
-
+        # Validate receipt can be edited
+        is_valid, error_message = ReceiptService.validate_receipt_for_editing(receipt)
+        if not is_valid:
+            return Response(
+                {'error': error_message},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
+        try:
+            # Use service to update receipt
+            receipt = ReceiptService.update_receipt_fields(receipt, request.data)
+            return Response(
+                ReceiptSerializer(receipt).data, 
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            logger.error(f"Error updating receipt {receipt.id}: {str(e)}")
+            return Response(
+                {'error': f'Update failed: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
+
+
+class ReceiptBulkDeleteAPIView(generics.GenericAPIView):
+    """Bulk delete multiple receipts"""
+    queryset = Receipt.objects.all()
+    serializer_class = ReceiptSerializer
+    
+    def post(self, request, *args, **kwargs):
+        """Delete multiple receipts by IDs"""
+        receipt_ids = request.data.get('ids', [])
+        
+        if not receipt_ids:
+            return Response(
+                {'error': 'No receipt IDs provided'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        if not isinstance(receipt_ids, list):
+            return Response(
+                {'error': 'IDs must be a list'}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        try:
+            deleted_count = 0
+            failed_ids = []
+            
+            for receipt_id in receipt_ids:
+                try:
+                    receipt = Receipt.objects.get(id=receipt_id)
+                    receipt.delete()
+                    deleted_count += 1
+                    logger.info(f"Receipt {receipt_id} deleted successfully")
+                except Receipt.DoesNotExist:
+                    failed_ids.append(receipt_id)
+                    logger.warning(f"Receipt {receipt_id} not found")
+                except Exception as e:
+                    failed_ids.append(receipt_id)
+                    logger.error(f"Error deleting receipt {receipt_id}: {str(e)}")
+            
+            response_data = {
+                'message': f'Successfully deleted {deleted_count} receipt(s)',
+                'deleted_count': deleted_count,
+                'total_requested': len(receipt_ids)
+            }
+            
+            if failed_ids:
+                response_data['failed_ids'] = failed_ids
+                response_data['warning'] = f'Failed to delete {len(failed_ids)} receipt(s)'
+            
+            status_code = status.HTTP_200_OK if deleted_count > 0 else status.HTTP_400_BAD_REQUEST
+            return Response(response_data, status=status_code)
+            
+        except Exception as e:
+            logger.error(f"Error in bulk delete: {str(e)}")
+            return Response(
+                {'error': f'Bulk delete failed: {str(e)}'}, 
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class RegisterAPIview(generics.CreateAPIView):
+    """User registration endpoint"""
+    queryset = UserProfileReg.objects.all()
+    serializer_class = UserProfileRegSerializer
 
