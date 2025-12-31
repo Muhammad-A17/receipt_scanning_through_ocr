@@ -95,3 +95,5 @@ def get_ocr_service() -> OCRService:
         _ocr_service_instance = OCRService()
     return _ocr_service_instance
 
+
+

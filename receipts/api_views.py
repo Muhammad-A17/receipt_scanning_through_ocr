@@ -6,6 +6,8 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 import logging
+import threading
+import time
 
 from .models import Receipt, UserProfileReg
 from .serializers import ReceiptSerializer, UserProfileRegSerializer
@@ -95,18 +97,45 @@ class ReceiptProcessAPIView(generics.CreateAPIView):
             # Get OCR service and process image
             ocr_service = get_ocr_service()
             image_path = receipt.image.path
-            
+
             logger.info(f"Processing receipt {receipt.id} with image: {image_path}")
-            
-            # Process with OCR
-            receipt_data = ocr_service.process_receipt_image(image_path)
-            
+
+            # Process with OCR with timeout (4 minutes)
+            processing_result = {}
+            processing_error = None
+
+            def process_with_timeout():
+                nonlocal processing_result, processing_error
+                try:
+                    processing_result = ocr_service.process_receipt_image(image_path)
+                except Exception as e:
+                    processing_error = e
+
+            processing_thread = threading.Thread(target=process_with_timeout)
+            processing_thread.daemon = True
+            processing_thread.start()
+
+            # Wait for processing to complete with timeout
+            processing_thread.join(timeout=240)  # 4 minutes timeout
+
+            if processing_thread.is_alive():
+                logger.error(f"OCR processing timed out for receipt {receipt.id}")
+                return Response(
+                    {'error': 'Processing timed out. The receipt may be too complex. Please try again.'},
+                    status=status.HTTP_408_REQUEST_TIMEOUT
+                )
+
+            if processing_error:
+                raise processing_error
+
+            receipt_data = processing_result
+
             # Update receipt with extracted data
             receipt = ocr_service.update_receipt_with_ocr_data(receipt, receipt_data)
-            
+
             logger.info(f"Receipt {receipt.id} processed successfully")
             return Response(
-                ReceiptSerializer(receipt).data, 
+                ReceiptSerializer(receipt).data,
                 status=status.HTTP_200_OK
             )
 

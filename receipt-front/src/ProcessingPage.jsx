@@ -74,7 +74,7 @@ function ProcessingPage() {
 
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 120000); // 2 minute timeout
+                const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minute timeout
 
                 const res = await fetch(`http://127.0.0.1:8000/api/receipts/${id}/process/`, {
                     method: 'POST',
@@ -89,6 +89,9 @@ function ProcessingPage() {
 
                 if (!res.ok) {
                     const errorData = await res.json().catch(() => ({}));
+                    if (res.status === 408) {
+                        throw new Error('Processing timed out. The receipt may be too complex. Please try again.');
+                    }
                     throw new Error(errorData.error || `Processing failed: HTTP ${res.status}`);
                 }
                 
