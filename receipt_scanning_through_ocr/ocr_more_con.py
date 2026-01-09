@@ -98,6 +98,8 @@ class EnhancedReceiptParser:
         except Exception as e:
             self.logger.error(f"Failed to initialize PaddleOCR: {str(e)}")
             raise
+        
+        print('DAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
         self.patterns = {
             'phone': [
@@ -135,7 +137,7 @@ class EnhancedReceiptParser:
 
         self.business_categories = {
             'restaurant': ['restaurant', 'cafe', 'diner', 'bistro', 'grill', 'kitchen', 'eatery'],
-            'retail': ['store', 'shop', 'mart', 'market', 'retail', 'boutique', 'home', 'centers', 'llc', 'inc', 'corp'],
+            'retail': ['store', 'shop', 'mart', 'market', 'retail', 'boutique'],
             'gas_station': ['gas', 'fuel', 'petroleum', 'shell', 'exxon', 'chevron', 'bp'],
             'grocery': ['grocery', 'supermarket', 'foods', 'fresh', 'produce'],
             'pharmacy': ['pharmacy', 'drug', 'cvs', 'walgreens', 'rite aid'],
@@ -935,125 +937,36 @@ class EnhancedReceiptParser:
                 if len(org)>3 and not any(skip in org.lower() for skip in ['receipt', 'invoice', 'total']):
                     merchant_candidates.append((org,0.8,'NER'))
             
-        # Enhanced merchant name extraction with better logic
-        for i, line in enumerate(lines[:8]):  # Check top 8 lines
+        #finding using high confidence lines - Updated for PaddleOCR 3.2.0
+        for i, line in enumerate(lines[:5]):
             if len(line) > 1 and len(line[1]) > 1:
                 text=line[1][0].strip()
                 conf=line[1][1]
             else:
                 continue
 
-            # Skip obvious non-merchant lines
-            if (len(text)<3 or 
-                re.match(r'^[\d\s\-\/\$\.,:]+$', text) or 
-                any(skip in text.lower() for skip in ['receipt', 'invoice', 'total', 'date', 'time', 'sale', 'sales#', 'trans#']) or
-                re.match(r'^\d+$', text) or  # Pure numbers
-                re.match(r'^[A-Z]{1,3}$', text) or  # Short acronyms
-                text.startswith('(') and ')' in text):  # Phone numbers
+            if len(text)>=3 and conf>0.7 and not re.match(r'^[\d\s\-\/\$\.,:]+$', text) and not any(skip in text.lower() for skip in ['receipt', 'invoice', 'total', 'date', 'time']):
+                
+                merchant_candidates.append((text, conf, f'top_line_{i}'))
+
+        #looking for business-type keyords - Updated for PaddleOCR 3.2.0
+        for line in lines[:10]:
+            if len(line) > 1 and len(line[1]) > 1:
+                text=line[1][0].strip()
+                conf=line[1][1]
+            else:
                 continue
 
-            # Calculate score based on multiple factors
-            score = conf
-            
-            # Position bonus (earlier lines are more likely to be merchant name)
-            position_bonus = max(0, (8 - i) * 0.1)
-            score += position_bonus
-            
-            # Business keyword bonus
-            for category, keywords in self.business_categories.items():
+            for category,keywords in self.business_categories.items():
                 if any(keyword in text.lower() for keyword in keywords):
-                    score += 0.2
-                    break
-            
-            # Length bonus (reasonable business name length)
-            if 5 <= len(text) <= 50:
-                score += 0.1
-            
-            # Company suffix bonus
-            if any(suffix in text.upper() for suffix in ['LLC', 'INC', 'CORP', 'LTD', 'CO']):
-                score += 0.3
-            
-            # Avoid phone numbers and addresses
-            if not (re.match(r'^\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}', text) or  # Phone
-                   re.search(r'\d{5}(-\d{4})?', text)):  # ZIP code
-                
-                merchant_candidates.append((text, score, f'line_{i}_conf_{conf:.3f}'))
-                print(f" DEBUG - Merchant candidate: '{text}' (score: {score:.3f}, conf: {conf:.3f}, line: {i})")
-
-        # Select best merchant candidate
+                    merchant_candidates.append((text, conf + 0.1, f'business_keyword_{category}'))
+        
+        #electing best merchant candidate
         if merchant_candidates:
-            merchant_candidates.sort(key=lambda x: x[1], reverse=True)
-            best_candidate = merchant_candidates[0]
-            merchant_info['name'] = best_candidate[0]
-            merchant_info['confidence'] = best_candidate[1]
-            merchant_info['method'] = best_candidate[2]
-            print(f" DEBUG - Selected merchant: '{best_candidate[0]}' (score: {best_candidate[1]:.3f})")
-        else:
-            print(" DEBUG - No merchant candidates found")
-            
-        # Fallback: Try to find complete business name by looking for company suffixes
-        if not merchant_info.get('name') or len(merchant_info.get('name', '')) < 5:
-            print(" DEBUG - Trying fallback method for complete business name...")
-            for i, line in enumerate(lines[:10]):
-                if len(line) > 1 and len(line[1]) > 1:
-                    text = line[1][0].strip()
-                    conf = line[1][1]
-                    
-                    # Look for lines with company suffixes that might be complete business names
-                    if (conf > 0.8 and 
-                        len(text) > 10 and 
-                        any(suffix in text.upper() for suffix in ['LLC', 'INC', 'CORP', 'LTD', 'CO', 'COMPANY']) and
-                        not any(skip in text.lower() for skip in ['receipt', 'invoice', 'total', 'date', 'time', 'sale'])):
-                        
-                        merchant_info['name'] = text
-                        merchant_info['confidence'] = conf
-                        merchant_info['method'] = f'fallback_suffix_line_{i}'
-                        print(f" DEBUG - Fallback found: '{text}' (conf: {conf:.3f})")
-                        break
-                        
-        # Multi-line business name detection (generalized)
-        if not merchant_info.get('name') or len(merchant_info.get('name', '')) < 8:
-            print(" DEBUG - Looking for multi-line business name pattern...")
-            for i, line in enumerate(lines[:8]):
-                if len(line) > 1 and len(line[1]) > 1:
-                    text = line[1][0].strip()
-                    conf = line[1][1]
-                    
-                    # Look for potential business name starters
-                    if (conf > 0.7 and 
-                        len(text) > 3 and
-                        not any(skip in text.lower() for skip in ['receipt', 'invoice', 'total', 'date', 'time', 'sale', 'sales#', 'trans#']) and
-                        not re.match(r'^[\d\s\-\/\$\.,:]+$', text) and
-                        not re.match(r'^\d+$', text)):
-                        
-                        # Try to find continuation in the next few lines
-                        complete_name = text
-                        for j in range(i+1, min(i+3, len(lines))):
-                            if len(lines[j]) > 1 and len(lines[j][1]) > 1:
-                                next_text = lines[j][1][0].strip()
-                                next_conf = lines[j][1][1]
-                                
-                                # Check if next line looks like a business name continuation
-                                if (next_conf > 0.8 and 
-                                    len(next_text) > 3 and
-                                    not any(skip in next_text.lower() for skip in ['receipt', 'invoice', 'total', 'date', 'time', 'sale']) and
-                                    not re.match(r'^[\d\s\-\/\$\.,:]+$', next_text) and
-                                    not re.match(r'^\d+$', next_text) and
-                                    # Check if it has business-like keywords or company suffixes
-                                    (any(suffix in next_text.upper() for suffix in ['LLC', 'INC', 'CORP', 'LTD', 'CO', 'COMPANY']) or
-                                     any(keyword in next_text.lower() for keyword in ['home', 'center', 'store', 'shop', 'market', 'restaurant', 'cafe']))):
-                                    
-                                    complete_name = f"{text} {next_text}"
-                                    print(f" DEBUG - Multi-line business name found: '{complete_name}' (conf: {conf:.3f})")
-                                    break
-                        
-                        # Only use if we found a longer, more complete name
-                        if len(complete_name) > len(merchant_info.get('name', '')):
-                            merchant_info['name'] = complete_name
-                            merchant_info['confidence'] = conf
-                            merchant_info['method'] = f'multi_line_line_{i}'
-                            print(f" DEBUG - Updated to multi-line name: '{complete_name}' (conf: {conf:.3f})")
-                            break
+            merchant_candidates.sort(key=lambda x: x[1],reverse=True)
+            merchant_info['name']=merchant_candidates[0][0]
+            merchant_info['confidence']=merchant_candidates[0][1]
+            merchant_info['method']=merchant_candidates[0][2]
 
         #extracting phone number
         for pattern in self.patterns['phone']:

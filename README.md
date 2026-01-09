@@ -192,7 +192,24 @@
    source venv/bin/activate
    ```
 
-3. **Install Python dependencies**
+3. **Set up environment variables (Recommended for production)**
+   ```bash
+   # Generate a secret key
+   python -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())"
+   
+   # Set the environment variable
+   # On Windows (PowerShell)
+   $env:DJANGO_SECRET_KEY="your-generated-secret-key"
+   
+   # On Windows (CMD)
+   set DJANGO_SECRET_KEY=your-generated-secret-key
+   
+   # On macOS/Linux
+   export DJANGO_SECRET_KEY="your-generated-secret-key"
+   ```
+   > **Note**: For production, always set `DJANGO_SECRET_KEY` environment variable. The application will use a default key for development only.
+
+4. **Install Python dependencies**
    ```bash
    pip install django djangorestframework pillow
    pip install opencv-python==4.12.0.88
@@ -201,22 +218,22 @@
    pip install spacy==3.8.7
    ```
 
-4. **Download spaCy language model**
+5. **Download spaCy language model**
    ```bash
    python -m spacy download en_core_web_sm
    ```
 
-5. **Run database migrations**
+6. **Run database migrations**
    ```bash
    python manage.py migrate
    ```
 
-6. **Create a superuser (optional)**
+7. **Create a superuser (optional)**
    ```bash
    python manage.py createsuperuser
    ```
 
-7. **Start the Django server**
+8. **Start the Django server**
    ```bash
    python manage.py runserver
    ```

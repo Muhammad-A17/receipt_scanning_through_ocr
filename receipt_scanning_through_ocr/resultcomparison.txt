@@ -1,0 +1,57 @@
+ON r1.peg
+previous - before image processing
+==================================================
+ OCR RESULTS:
+==================================================
+ Found 22 text lines
+
+High Confidence, greater than 0.9.
+Bad Confidence
+Bad Confidence
+High Confidence, greater than 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+High Confidence, greater than 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+High Confidence, greater than 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+High Confidence, greater than 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+Medium Confidence, greater than 0.7, less than or eual to 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+High Confidence, greater than 0.9.
+
+------------------------------
+ FULL TEXT:
+------------------------------
+EPIC STEAKHOUSE
+SA9105
+368T
+RECEIPT
+2FILET
+$98.00
+$52.00
+1RIBEYE
+1.CAESAR SALAD
+$74.50
+1CREAMED SPINACH
+$11.00
+$8.50
+1BAKED POTATO
+$185.00
+SUBTOTAL
+17.02
+TAX
+$75.00
+dil
+$277.02
+TOTAL
+
+original better than the one ith image processing in both images
