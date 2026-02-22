@@ -35,47 +35,30 @@ class ReceiptService:
     @staticmethod
     def update_receipt_fields(receipt: Receipt, data: Dict[str, Any]) -> Receipt:
         """
-        Update receipt fields from request data.
-        
-        Args:
-            receipt: Receipt instance to update
-            data: Dictionary of field values
-        
-        Returns:
-            Updated Receipt instance
+        Update receipt fields from request data using automated mapping.
         """
-        # Merchant information
-        receipt.merchant_name = data.get('merchant_name', receipt.merchant_name)
-        receipt.merchant_address = data.get('merchant_address', receipt.merchant_address)
-        receipt.merchant_phone = data.get('merchant_phone', receipt.merchant_phone)
-        receipt.merchant_email = data.get('merchant_email', receipt.merchant_email)
+        # Define fields and their types (defaulting to string/pass-through)
+        fields_to_map = [
+            'merchant_name', 'merchant_address', 'merchant_phone', 'merchant_email',
+            'date', 'time', 'transaction_id', 'receipt_number',
+            'items', 'payment_method', 'card_type', 'card_last_four',
+            'category', 'currency'
+        ]
         
-        # Transaction information
-        receipt.date = data.get('date', receipt.date)
-        receipt.time = data.get('time', receipt.time)
-        receipt.transaction_id = data.get('transaction_id', receipt.transaction_id)
-        receipt.receipt_number = data.get('receipt_number', receipt.receipt_number)
+        decimal_fields = ['tip', 'tax', 'sub_total', 'total', 'discount', 'tax_rate']
+
+        # Map standard fields
+        for field in fields_to_map:
+            if field in data:
+                setattr(receipt, field, data.get(field))
         
-        # Financial information
-        receipt.tip = to_decimal_or_none(data.get('tip', receipt.tip))
-        receipt.tax = to_decimal_or_none(data.get('tax', receipt.tax))
-        receipt.sub_total = to_decimal_or_none(data.get('sub_total', receipt.sub_total))
-        receipt.total = to_decimal_or_none(data.get('total', receipt.total))
-        receipt.discount = to_decimal_or_none(data.get('discount', receipt.discount))
-        
-        # Items and payment
-        receipt.items = data.get('items', receipt.items)
-        receipt.payment_method = data.get('payment_method', receipt.payment_method)
-        receipt.card_type = data.get('card_type', receipt.card_type)
-        receipt.card_last_four = data.get('card_last_four', receipt.card_last_four)
-        
-        # Additional fields
-        receipt.category = data.get('category', receipt.category)
-        receipt.tax_rate = to_decimal_or_none(data.get('tax_rate', receipt.tax_rate))
-        receipt.currency = data.get('currency', receipt.currency)
+        # Map decimal fields
+        for field in decimal_fields:
+            if field in data:
+                setattr(receipt, field, to_decimal_or_none(data.get(field)))
         
         receipt.save()
-        logger.info(f"Receipt {receipt.id} fields updated")
+        logger.info(f"Receipt {receipt.id} fields updated automatically")
         return receipt
     
     @staticmethod

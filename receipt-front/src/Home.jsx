@@ -1,8 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card, Button } from './components';
+import api from './services/api';
 
-function Home(){
+function Home() {
     const navigate = useNavigate();
     const [stats, setStats] = useState({ total: 0, processed: 0, totalSpent: 0 });
     const [loading, setLoading] = useState(true);
@@ -10,17 +11,14 @@ function Home(){
     useEffect(() => {
         const fetchStats = async () => {
             try {
-                const res = await fetch('http://127.0.0.1:8000/api/receipts/');
-                if (res.ok) {
-                    const receipts = await res.json();
-                    const processed = receipts.filter(r => r.processed);
-                    const totalSpent = processed.reduce((sum, r) => sum + (parseFloat(r.total) || 0), 0);
-                    setStats({
-                        total: receipts.length,
-                        processed: processed.length,
-                        totalSpent: totalSpent.toFixed(2)
-                    });
-                }
+                const receipts = await api.getReceipts();
+                const processed = receipts.filter(r => r.processed);
+                const totalSpent = processed.reduce((sum, r) => sum + (parseFloat(r.total) || 0), 0);
+                setStats({
+                    total: receipts.length,
+                    processed: processed.length,
+                    totalSpent: totalSpent.toFixed(2)
+                });
             } catch (err) {
                 console.error('Error fetching stats:', err);
             } finally {
@@ -30,7 +28,7 @@ function Home(){
         fetchStats();
     }, []);
 
-    return(
+    return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 pt-16 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
                 <div className="space-y-12">
@@ -45,7 +43,7 @@ function Home(){
                             Receipt Scanner
                         </h1>
                         <p className="text-xl text-gray-700 dark:text-gray-200 max-w-2xl mx-auto leading-relaxed font-medium">
-                            Transform your receipts into structured data with AI-powered OCR technology. 
+                            Transform your receipts into structured data with AI-powered OCR technology.
                             Extract merchant details, items, totals, and more in seconds.
                         </p>
                     </div>

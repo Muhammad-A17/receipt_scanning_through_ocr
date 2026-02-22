@@ -1,6 +1,9 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card, Button } from './components';
+import api from './services/api';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:8000';
 
 function ReceiptDetailPage() {
     const navigate = useNavigate();
@@ -13,11 +16,8 @@ function ReceiptDetailPage() {
     useEffect(() => {
         const loadReceipt = async () => {
             try {
-                const res = await fetch(`http://127.0.0.1:8000/api/receipts/${id}/`);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                const data = await res.json();
-                setReceipt(data);  
+                const data = await api.getReceipt(id);
+                setReceipt(data);
             } catch (e) {
                 setError(String(e));
             } finally {
@@ -72,7 +72,7 @@ function ReceiptDetailPage() {
                                     </svg>
                                 </div>
                             </div>
-            <div>
+                            <div>
                                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Error Loading Receipt</h2>
                                 <p className="text-red-700 font-semibold">{error}</p>
                             </div>
@@ -109,7 +109,7 @@ function ReceiptDetailPage() {
                 <div className="space-y-8">
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
+                        <div>
                             <h1 className="text-4xl font-bold text-gray-900 mb-2">
                                 Receipt Details
                             </h1>
@@ -311,7 +311,7 @@ function ReceiptDetailPage() {
                                     </div>
                                 </Card>
                             )}
-            </div>
+                        </div>
 
                         {/* Sidebar */}
                         <div className="space-y-6">
@@ -455,7 +455,7 @@ function ReceiptDetailPage() {
                                     <div className="relative group">
                                         <div className="absolute inset-0 bg-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                         <img
-                                            src={`http://127.0.0.1:8000${receipt.image}`}
+                                            src={`${API_BASE_URL}${receipt.image}`}
                                             alt="Receipt"
                                             className="w-full rounded-xl border-2 border-gray-200 shadow-lg transition-transform group-hover:scale-[1.02]"
                                         />
@@ -469,7 +469,7 @@ function ReceiptDetailPage() {
                             )}
                         </div>
                     </div>
-            </div>
+                </div>
             </div>
         </div>
     );

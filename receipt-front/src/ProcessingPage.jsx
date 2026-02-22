@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card, Button, Loader } from './components';
+import api from './services/api';
 
 function useQuery() {
     const { search } = useLocation();
@@ -24,7 +25,7 @@ function ProcessingPage() {
                 setStatus('error');
                 return;
             }
-            
+
             setStatus('processing');
             setError(null);
             setProgress(0);
@@ -73,31 +74,15 @@ function ProcessingPage() {
             }, 2000);
 
             try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 300000); // 5 minute timeout
+                // Process with OCR using service (service handles timeout)
+                const data = await api.processReceipt(id);
 
-                const res = await fetch(`http://127.0.0.1:8000/api/receipts/${id}/process/`, {
-                    method: 'POST',
-                    signal: controller.signal,
-                });
-
-                clearTimeout(timeoutId);
                 clearInterval(progressInterval);
                 clearInterval(slowProgressInterval);
                 setProgress(100);
                 setStage('Complete!');
-
-                if (!res.ok) {
-                    const errorData = await res.json().catch(() => ({}));
-                    if (res.status === 408) {
-                        throw new Error('Processing timed out. The receipt may be too complex. Please try again.');
-                    }
-                    throw new Error(errorData.error || `Processing failed: HTTP ${res.status}`);
-                }
-                
-                const data = await res.json();
                 console.log('Processing Result:', data);
-                
+
                 // Small delay to show 100% before completing
                 setTimeout(() => {
                     setStatus('completed');
@@ -105,19 +90,14 @@ function ProcessingPage() {
             } catch (e) {
                 clearInterval(progressInterval);
                 clearInterval(slowProgressInterval);
-                
-                if (e.name === 'AbortError') {
-                    setError('Processing timed out. The receipt may be too complex. Please try again.');
-                } else {
-                    setError(String(e));
-                }
+                setError(String(e));
                 setStatus('error');
             }
         };
-        
+
         runProcessing();
     }, [id]);
-    
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 pt-16 transition-colors duration-300">
             <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -127,9 +107,9 @@ function ProcessingPage() {
                         <div className="flex justify-center">
                             {status === 'processing' && (
                                 <div className="space-y-4">
-                                    <Loader 
-                                        text="Processing" 
-                                        words={["receipt", "data", "information", "details", "receipt"]} 
+                                    <Loader
+                                        text="Processing"
+                                        words={["receipt", "data", "information", "details", "receipt"]}
                                     />
                                 </div>
                             )}
@@ -173,7 +153,7 @@ function ProcessingPage() {
                         {status === 'processing' && (
                             <div className="space-y-3">
                                 <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden shadow-inner">
-                                    <div 
+                                    <div
                                         className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full transition-all duration-500 shadow-lg"
                                         style={{ width: `${progress}%` }}
                                     ></div>

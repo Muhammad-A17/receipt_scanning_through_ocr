@@ -3,6 +3,7 @@ Centralized OCR processing service
 """
 import os
 import logging
+import threading
 from typing import Optional
 from receipt_scanning_through_ocr.ocr_more_lat import EnhancedReceiptParser
 from receipts.utils.helpers import map_receipt_data_to_model
@@ -29,6 +30,37 @@ class OCRService:
         except Exception as e:
             logger.error(f"Failed to initialize OCR parser: {str(e)}")
             raise
+    
+    def process_and_update_receipt(self, receipt, timeout=240):
+        """
+        Process a receipt with OCR and update its data in one step.
+        Handles threading and timeout internally.
+        """
+        image_path = receipt.image.path
+        processing_result = {}
+        processing_error = None
+
+        def process_with_timeout():
+            nonlocal processing_result, processing_error
+            try:
+                processing_result = self.process_receipt_image(image_path)
+            except Exception as e:
+                processing_error = e
+
+        thread = threading.Thread(target=process_with_timeout)
+        thread.daemon = True
+        thread.start()
+
+        thread.join(timeout=timeout)
+
+        if thread.is_alive():
+            raise TimeoutError("Processing timed out. The receipt may be too complex. Please try again.")
+
+        if processing_error:
+            raise processing_error
+
+        # Update and save receipt
+        return self.update_receipt_with_ocr_data(receipt, processing_result)
     
     def process_receipt_image(self, image_path: str):
         """

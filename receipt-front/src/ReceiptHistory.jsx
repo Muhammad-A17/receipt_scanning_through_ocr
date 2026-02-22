@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Card, Button } from './components';
+import api from './services/api';
 
 function ReceiptHistory() {
     const navigate = useNavigate();
@@ -20,9 +21,7 @@ function ReceiptHistory() {
 
     const loadReceipts = async () => {
         try {
-            const res = await fetch('http://127.0.0.1:8000/api/receipts/');
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const raw = await res.json();
+            const raw = await api.getReceipts();
             const items = Array.isArray(raw) ? raw : (raw.results ?? []);
             setReceipts(items);
         } catch (err) {
@@ -37,14 +36,14 @@ function ReceiptHistory() {
     }, []);
 
     const filteredReceipts = receipts.filter(receipt => {
-        const matchesSearch = !searchTerm || 
+        const matchesSearch = !searchTerm ||
             (receipt.merchant_name?.toLowerCase().includes(searchTerm.toLowerCase())) ||
             (receipt.total?.toString().includes(searchTerm));
-        
-        const matchesFilter = filterProcessed === 'all' || 
+
+        const matchesFilter = filterProcessed === 'all' ||
             (filterProcessed === 'processed' && receipt.processed) ||
             (filterProcessed === 'unprocessed' && !receipt.processed);
-        
+
         return matchesSearch && matchesFilter;
     });
 
@@ -70,19 +69,19 @@ function ReceiptHistory() {
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
-            day: 'numeric' 
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric'
         });
     };
 
     const formatDateTime = (dateString) => {
         if (!dateString) return 'N/A';
         const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', { 
-            year: 'numeric', 
-            month: 'short', 
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'short',
             day: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
@@ -118,35 +117,15 @@ function ReceiptHistory() {
             if (deleteTarget === null) {
                 // Bulk delete
                 const ids = Array.from(selectedReceipts);
-                const res = await fetch('http://127.0.0.1:8000/api/receipts/bulk-delete/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ ids }),
-                });
-                
-                if (!res.ok) {
-                    const error = await res.json();
-                    throw new Error(error.error || 'Bulk delete failed');
-                }
-                
-                const data = await res.json();
+                const data = await api.bulkDelete(ids);
                 setModalMessage(`Successfully deleted ${data.deleted_count} receipt(s)`);
                 setShowSuccessModal(true);
                 setSelectedReceipts(new Set());
             } else {
                 // Single delete
-                const res = await fetch(`http://127.0.0.1:8000/api/receipts/${deleteTarget}/`, {
-                    method: 'DELETE',
-                });
-                
-                if (!res.ok) {
-                    const error = await res.json();
-                    throw new Error(error.error || 'Delete failed');
-                }
+                await api.deleteReceipt(deleteTarget);
             }
-            
+
             await loadReceipts();
             setShowDeleteConfirm(false);
             setDeleteTarget(null);
@@ -159,10 +138,10 @@ function ReceiptHistory() {
     };
 
     const handleExport = (format = 'csv') => {
-        const receiptsToExport = deleteTarget === null 
+        const receiptsToExport = deleteTarget === null
             ? sortedReceipts.filter(r => selectedReceipts.has(r.id))
             : sortedReceipts.filter(r => r.id === deleteTarget);
-        
+
         if (receiptsToExport.length === 0) {
             setModalMessage('Please select at least one receipt to export');
             setShowErrorModal(true);
@@ -185,12 +164,12 @@ function ReceiptHistory() {
                 r.processed ? 'Processed' : 'Pending',
                 r.receipt_number || 'N/A'
             ]);
-            
+
             const csvContent = [
                 headers.join(','),
                 ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
             ].join('\n');
-            
+
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -219,11 +198,11 @@ function ReceiptHistory() {
         total: receipts.length,
         processed: receipts.filter(r => r.processed).length,
         totalSpent: receipts.filter(r => r.processed).reduce((sum, r) => sum + (parseFloat(r.total) || 0), 0).toFixed(2),
-        average: receipts.filter(r => r.processed).length > 0 
+        average: receipts.filter(r => r.processed).length > 0
             ? (receipts.filter(r => r.processed).reduce((sum, r) => sum + (parseFloat(r.total) || 0), 0) / receipts.filter(r => r.processed).length).toFixed(2)
             : '0.00'
     };
-    
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 pt-16 transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -353,7 +332,7 @@ function ReceiptHistory() {
                                     className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                                 />
                             </div>
-                            
+
                             {/* Filter */}
                             <select
                                 value={filterProcessed}
@@ -383,11 +362,10 @@ function ReceiptHistory() {
                             <div className="flex items-center gap-2 border-2 border-gray-200 rounded-xl p-1 bg-gray-50">
                                 <button
                                     onClick={() => setViewMode('card')}
-                                    className={`px-4 py-2 rounded-lg transition-all ${
-                                        viewMode === 'card'
+                                    className={`px-4 py-2 rounded-lg transition-all ${viewMode === 'card'
                                             ? 'bg-blue-600 text-white shadow-md'
                                             : 'text-gray-600 hover:bg-gray-100'
-                                    }`}
+                                        }`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
@@ -395,11 +373,10 @@ function ReceiptHistory() {
                                 </button>
                                 <button
                                     onClick={() => setViewMode('list')}
-                                    className={`px-4 py-2 rounded-lg transition-all ${
-                                        viewMode === 'list'
+                                    className={`px-4 py-2 rounded-lg transition-all ${viewMode === 'list'
                                             ? 'bg-blue-600 text-white shadow-md'
                                             : 'text-gray-600 hover:bg-gray-100'
-                                    }`}
+                                        }`}
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
@@ -407,7 +384,7 @@ function ReceiptHistory() {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div className="flex items-center justify-between">
                             <p className="text-sm font-semibold text-gray-700">
                                 Showing <span className="font-bold text-gray-900">{sortedReceipts.length}</span> of <span className="font-bold text-gray-900">{receipts.length}</span> receipts
@@ -447,16 +424,15 @@ function ReceiptHistory() {
                                 />
                                 <label className="text-sm font-semibold text-gray-700">Select All</label>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                 {sortedReceipts.map(receipt => (
                                     <div
                                         key={receipt.id}
-                                        className={`group bg-white border-2 rounded-xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer ${
-                                            selectedReceipts.has(receipt.id) 
-                                                ? 'border-blue-500 bg-blue-50' 
+                                        className={`group bg-white border-2 rounded-xl p-6 hover:shadow-xl transition-all duration-300 cursor-pointer ${selectedReceipts.has(receipt.id)
+                                                ? 'border-blue-500 bg-blue-50'
                                                 : 'border-gray-200 hover:border-blue-300'
-                                        }`}
+                                            }`}
                                         onClick={() => handleSelectReceipt(receipt.id)}
                                     >
                                         <div className="flex items-start justify-between mb-4">
@@ -491,7 +467,7 @@ function ReceiptHistory() {
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div className="space-y-3 mb-4">
                                             <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
                                                 <div className="flex items-center space-x-2">
@@ -504,7 +480,7 @@ function ReceiptHistory() {
                                                     ${receipt.total || 'N/A'}
                                                 </span>
                                             </div>
-                                            
+
                                             <div className="flex items-center space-x-4 text-sm">
                                                 <div className="flex items-center space-x-2 text-gray-600">
                                                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -516,8 +492,8 @@ function ReceiptHistory() {
                                         </div>
 
                                         <div className="flex gap-2">
-                                            <Button 
-                                                className="flex-1" 
+                                            <Button
+                                                className="flex-1"
                                                 size="sm"
                                                 onClick={(e) => {
                                                     e.stopPropagation();
@@ -526,7 +502,7 @@ function ReceiptHistory() {
                                             >
                                                 View
                                             </Button>
-                                            <Button 
+                                            <Button
                                                 size="sm"
                                                 color="danger"
                                                 onClick={(e) => {
@@ -556,7 +532,7 @@ function ReceiptHistory() {
                                 />
                                 <label className="text-sm font-semibold text-gray-700">Select All</label>
                             </div>
-                            
+
                             {/* Table Header */}
                             <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-3 bg-gray-50 rounded-lg border border-gray-200 font-semibold text-sm text-gray-700">
                                 <div className="col-span-1"></div>
@@ -566,15 +542,14 @@ function ReceiptHistory() {
                                 <div className="col-span-2">Status</div>
                                 <div className="col-span-2">Actions</div>
                             </div>
-                            
+
                             {sortedReceipts.map(receipt => (
                                 <div
                                     key={receipt.id}
-                                    className={`group grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-4 border-2 rounded-xl transition-all duration-300 ${
-                                        selectedReceipts.has(receipt.id)
+                                    className={`group grid grid-cols-1 md:grid-cols-12 gap-4 items-center p-4 border-2 rounded-xl transition-all duration-300 ${selectedReceipts.has(receipt.id)
                                             ? 'bg-blue-50 border-blue-500'
                                             : 'bg-white border-gray-200 hover:shadow-lg hover:border-blue-300'
-                                    }`}
+                                        }`}
                                 >
                                     <div className="col-span-1">
                                         <input
@@ -584,7 +559,7 @@ function ReceiptHistory() {
                                             className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                                         />
                                     </div>
-                                    
+
                                     <div className="col-span-1 md:col-span-3">
                                         <div className="flex items-center space-x-3">
                                             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -600,7 +575,7 @@ function ReceiptHistory() {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="col-span-1 md:col-span-2">
                                         <div className="flex items-center space-x-2 text-gray-700">
                                             <svg className="w-4 h-4 text-gray-500 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -609,7 +584,7 @@ function ReceiptHistory() {
                                             <span className="font-medium">{formatDate(receipt.date || receipt.created_at)}</span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="col-span-1 md:col-span-2">
                                         <div className="flex items-center space-x-2">
                                             <svg className="w-4 h-4 text-gray-500 hidden md:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -618,7 +593,7 @@ function ReceiptHistory() {
                                             <span className="font-bold text-lg text-gray-900">${receipt.total || 'N/A'}</span>
                                         </div>
                                     </div>
-                                    
+
                                     <div className="col-span-1 md:col-span-2">
                                         {receipt.processed ? (
                                             <span className="inline-flex items-center px-3 py-1 text-xs font-semibold bg-green-100 text-green-800 rounded-full border border-green-300">
@@ -637,7 +612,7 @@ function ReceiptHistory() {
                                             </span>
                                         )}
                                     </div>
-                                    
+
                                     <div className="col-span-1 md:col-span-2">
                                         <div className="flex gap-2">
                                             <Button
@@ -679,7 +654,7 @@ function ReceiptHistory() {
                                 Confirm Delete
                             </h3>
                             <p className="text-gray-700">
-                                {deleteTarget === null 
+                                {deleteTarget === null
                                     ? `Are you sure you want to delete ${selectedReceipts.size} receipt(s)? This action cannot be undone.`
                                     : 'Are you sure you want to delete this receipt? This action cannot be undone.'
                                 }

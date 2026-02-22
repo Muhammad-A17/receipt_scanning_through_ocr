@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
 import { Card, Button } from './components';
+import api from './services/api';
 
 function UploadPage() {
     const navigate = useNavigate();
     const fileInputRef = useRef(null);
-    
+
     const [file, setFile] = useState(null);
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState(null);
@@ -15,10 +16,10 @@ function UploadPage() {
 
     const onFileChange = (selectedFile) => {
         if (!selectedFile) return;
-        
+
         setFile(selectedFile);
         setError(null);
-        
+
         const reader = new FileReader();
         reader.onload = (e) => {
             setImagePreview(e.target.result);
@@ -45,7 +46,7 @@ function UploadPage() {
         e.preventDefault();
         e.stopPropagation();
         setDragActive(false);
-        
+
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             onFileChange(e.dataTransfer.files[0]);
         }
@@ -60,16 +61,7 @@ function UploadPage() {
         setUploading(true);
         setError(null);
         try {
-            const form = new FormData();
-            form.append('image', file);
-
-            const res = await fetch('http://127.0.0.1:8000/api/receipts/upload/', {
-                method: 'POST',
-                body: form,
-            });
-            if (!res.ok) throw new Error(`Upload failed: HTTP ${res.status}`);
-
-            const data = await res.json();
+            const data = await api.uploadReceipt(file);
             setReceiptId(data.id);
         } catch (e) {
             setError(String(e));
@@ -81,7 +73,7 @@ function UploadPage() {
     const goToProcessing = () => {
         if (receiptId) navigate(`/processing?id=${receiptId}`);
     };
-    
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50 pt-16 transition-colors duration-300">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -104,8 +96,8 @@ function UploadPage() {
                             onDrop={handleDrop}
                             className={`
                                 relative border-2 border-dashed rounded-2xl p-16 text-center transition-all duration-300
-                                ${dragActive 
-                                    ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-[1.02]' 
+                                ${dragActive
+                                    ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 scale-[1.02]'
                                     : 'border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500'
                                 }
                                 ${imagePreview ? 'bg-gray-50' : 'bg-white'}
@@ -146,9 +138,9 @@ function UploadPage() {
                             ) : (
                                 <div className="space-y-4">
                                     <div className="relative inline-block group">
-                                        <img 
-                                            src={imagePreview} 
-                                            alt="Receipt preview" 
+                                        <img
+                                            src={imagePreview}
+                                            alt="Receipt preview"
                                             className="max-h-80 rounded-xl shadow-2xl border-4 border-white dark:border-gray-700"
                                         />
                                         <button

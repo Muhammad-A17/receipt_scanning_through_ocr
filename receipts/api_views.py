@@ -96,42 +96,11 @@ class ReceiptProcessAPIView(generics.CreateAPIView):
         try:
             # Get OCR service and process image
             ocr_service = get_ocr_service()
-            image_path = receipt.image.path
-
-            logger.info(f"Processing receipt {receipt.id} with image: {image_path}")
-
-            # Process with OCR with timeout (4 minutes)
-            processing_result = {}
-            processing_error = None
-
-            def process_with_timeout():
-                nonlocal processing_result, processing_error
-                try:
-                    processing_result = ocr_service.process_receipt_image(image_path)
-                except Exception as e:
-                    processing_error = e
-
-            processing_thread = threading.Thread(target=process_with_timeout)
-            processing_thread.daemon = True
-            processing_thread.start()
-
-            # Wait for processing to complete with timeout
-            processing_thread.join(timeout=240)  # 4 minutes timeout
-
-            if processing_thread.is_alive():
-                logger.error(f"OCR processing timed out for receipt {receipt.id}")
-                return Response(
-                    {'error': 'Processing timed out. The receipt may be too complex. Please try again.'},
-                    status=status.HTTP_408_REQUEST_TIMEOUT
-                )
-
-            if processing_error:
-                raise processing_error
-
-            receipt_data = processing_result
-
-            # Update receipt with extracted data
-            receipt = ocr_service.update_receipt_with_ocr_data(receipt, receipt_data)
+            
+            logger.info(f"Processing receipt {receipt.id}")
+            
+            # Process with OCR using service (service handles timeout)
+            receipt = ocr_service.process_and_update_receipt(receipt)
 
             logger.info(f"Receipt {receipt.id} processed successfully")
             return Response(
@@ -139,6 +108,12 @@ class ReceiptProcessAPIView(generics.CreateAPIView):
                 status=status.HTTP_200_OK
             )
 
+        except TimeoutError as e:
+            logger.error(f"OCR processing timed out for receipt {receipt.id}: {str(e)}")
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_408_REQUEST_TIMEOUT
+            )
         except FileNotFoundError as e:
             logger.error(f"Image file not found: {str(e)}")
             return Response(
@@ -207,21 +182,8 @@ class ReceiptBulkDeleteAPIView(generics.GenericAPIView):
             )
         
         try:
-            deleted_count = 0
-            failed_ids = []
-            
-            for receipt_id in receipt_ids:
-                try:
-                    receipt = Receipt.objects.get(id=receipt_id)
-                    receipt.delete()
-                    deleted_count += 1
-                    logger.info(f"Receipt {receipt_id} deleted successfully")
-                except Receipt.DoesNotExist:
-                    failed_ids.append(receipt_id)
-                    logger.warning(f"Receipt {receipt_id} not found")
-                except Exception as e:
-                    failed_ids.append(receipt_id)
-                    logger.error(f"Error deleting receipt {receipt_id}: {str(e)}")
+            # Use bulk delete for efficiency
+            deleted_count, _ = Receipt.objects.filter(id__in=receipt_ids).delete()
             
             response_data = {
                 'message': f'Successfully deleted {deleted_count} receipt(s)',
@@ -229,12 +191,7 @@ class ReceiptBulkDeleteAPIView(generics.GenericAPIView):
                 'total_requested': len(receipt_ids)
             }
             
-            if failed_ids:
-                response_data['failed_ids'] = failed_ids
-                response_data['warning'] = f'Failed to delete {len(failed_ids)} receipt(s)'
-            
-            status_code = status.HTTP_200_OK if deleted_count > 0 else status.HTTP_400_BAD_REQUEST
-            return Response(response_data, status=status_code)
+            return Response(response_data, status=status.HTTP_200_OK)
             
         except Exception as e:
             logger.error(f"Error in bulk delete: {str(e)}")

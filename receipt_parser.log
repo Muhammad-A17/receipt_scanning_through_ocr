@@ -1,0 +1,158 @@
+2026-02-22 08:03:01,631 - receipt_scanning_through_ocr.ocr_more_lat - ERROR - Failed to initialize PaddleOCR: No module named 'paddle'
+2026-02-22 08:03:01,631 - receipts.services.ocr_service - ERROR - Failed to initialize OCR parser: No module named 'paddle'
+2026-02-22 08:03:01,631 - receipt_scanning_through_ocr.ocr_more_lat - ERROR - Failed to initialize PaddleOCR: No module named 'paddle'
+2026-02-22 08:03:01,632 - receipts.api_views - ERROR - OCR processing failed for receipt 25: No module named 'paddle'
+2026-02-22 08:03:01,632 - receipts.services.ocr_service - ERROR - Failed to initialize OCR parser: No module named 'paddle'
+2026-02-22 08:03:01,632 - django.request - ERROR - Internal Server Error: /api/receipts/25/process/
+2026-02-22 08:03:01,636 - receipts.api_views - ERROR - OCR processing failed for receipt 25: No module named 'paddle'
+2026-02-22 08:03:01,637 - django.request - ERROR - Internal Server Error: /api/receipts/25/process/
+2026-02-22 08:18:08,667 - receipts.services.receipt_service - INFO - Receipt 26 created from image upload
+2026-02-22 08:18:21,257 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,279 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,555 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,597 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,641 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,679 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:18:21,734 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:18:21,734 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,735 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,736 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,736 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,737 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,738 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,746 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,747 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,778 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,784 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,784 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_doc_ori/resolve/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:21,787 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,791 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,794 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,795 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,796 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,797 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,818 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,830 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,831 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,833 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,835 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,842 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,843 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,844 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,846 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,877 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,986 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/xet-read-token/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8 "HTTP/1.1 200 OK"
+2026-02-22 08:18:21,998 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-LCNet_x1_0_doc_ori/xet-read-token/d3b95a6dff5fe8a94f2748e12b61cb26818a0df8 "HTTP/1.1 200 OK"
+2026-02-22 08:18:35,546 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/UVDoc/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:18:35,825 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/UVDoc/resolve/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:35,871 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:35,916 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:35,955 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/UVDoc/resolve/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:35,962 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/UVDoc/resolve/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:35,969 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/UVDoc/resolve/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:18:35,971 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/UVDoc/resolve/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:35,976 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/UVDoc/resolve/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:18:36,003 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,009 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,021 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,029 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,049 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,054 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,060 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,072 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/UVDoc/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:18:36,241 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/UVDoc/xet-read-token/16c3f0ea9c2f0c6a57e24160f7eeaa7574613fa3 "HTTP/1.1 200 OK"
+2026-02-22 08:19:22,704 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:19:22,974 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_textline_ori/resolve/cd237a44b0e359d4fe38310a416203cf7403faa5/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:23,014 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,056 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,083 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_textline_ori/resolve/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:23,107 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_textline_ori/resolve/cd237a44b0e359d4fe38310a416203cf7403faa5/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:23,112 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_textline_ori/resolve/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:19:23,130 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,136 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_textline_ori/resolve/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:23,140 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-LCNet_x1_0_textline_ori/resolve/cd237a44b0e359d4fe38310a416203cf7403faa5/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:23,146 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,172 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,178 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,182 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,185 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,222 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,226 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/cd237a44b0e359d4fe38310a416203cf7403faa5/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:19:23,401 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-LCNet_x1_0_textline_ori/xet-read-token/cd237a44b0e359d4fe38310a416203cf7403faa5 "HTTP/1.1 200 OK"
+2026-02-22 08:19:41,985 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-OCRv5_server_det/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,266 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-OCRv5_server_det/resolve/ca867c897ecbca8873081573a802ad70d499cb94/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:42,308 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,354 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,428 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-OCRv5_server_det/resolve/ca867c897ecbca8873081573a802ad70d499cb94/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:42,472 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,495 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-OCRv5_server_det/resolve/ca867c897ecbca8873081573a802ad70d499cb94/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:42,516 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,537 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,553 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-OCRv5_server_det/resolve/ca867c897ecbca8873081573a802ad70d499cb94/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:42,554 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-OCRv5_server_det/resolve/ca867c897ecbca8873081573a802ad70d499cb94/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:19:42,579 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,595 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,596 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,645 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:19:42,783 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/PP-OCRv5_server_det/ca867c897ecbca8873081573a802ad70d499cb94/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:19:43,473 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/PP-OCRv5_server_det/resolve/ca867c897ecbca8873081573a802ad70d499cb94/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:19:43,737 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/PP-OCRv5_server_det/xet-read-token/ca867c897ecbca8873081573a802ad70d499cb94 "HTTP/1.1 200 OK"
+2026-02-22 08:21:51,884 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,281 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:21:52,326 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,332 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:21:52,432 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,508 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:21:52,619 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,659 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,726 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:21:52,760 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/xet-read-token/267c36e24c331595590fe7bd72bde2436fd286f2 "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,766 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:21:52,809 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:22:02,339 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:02,341 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:02,388 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:22:02,393 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:22:02,437 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:22:02,448 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:22:06,787 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/revision/main "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,065 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/inference.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:07,071 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/inference.yml "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:07,116 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,121 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,168 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.json "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,189 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/inference.yml "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,200 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/inference.pdiparams "HTTP/1.1 302 Found"
+2026-02-22 08:22:07,219 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:07,222 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:07,265 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,270 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,292 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/PaddlePaddle/en_PP-OCRv5_mobile_rec/resolve/267c36e24c331595590fe7bd72bde2436fd286f2/.gitattributes "HTTP/1.1 307 Temporary Redirect"
+2026-02-22 08:22:07,317 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/README.md "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,325 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/config.json "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,333 - httpx - INFO - HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:22:07,388 - httpx - INFO - HTTP Request: GET https://huggingface.co/api/resolve-cache/models/PaddlePaddle/en_PP-OCRv5_mobile_rec/267c36e24c331595590fe7bd72bde2436fd286f2/.gitattributes "HTTP/1.1 200 OK"
+2026-02-22 08:22:09,448 - receipt_scanning_through_ocr.ocr_more_lat - INFO - PaddleOCR initialized successfully
+2026-02-22 08:22:09,448 - receipts.services.ocr_service - INFO - OCR parser initialized successfully
+2026-02-22 08:22:09,449 - receipts.api_views - INFO - Processing receipt 26
+2026-02-22 08:22:09,449 - receipts.services.ocr_service - INFO - Processing receipt image: /home/pseudouser/receipt_scanning_through_ocr/receipts/receipt.jpg
+2026-02-22 08:22:09,449 - receipt_scanning_through_ocr.ocr_more_lat - INFO - Starting receipt processing for: /home/pseudouser/receipt_scanning_through_ocr/receipts/receipt.jpg
+2026-02-22 08:22:11,335 - root - INFO - preprocessing completed in 1.886s
+2026-02-22 08:22:30,839 - receipt_scanning_through_ocr.ocr_more_lat - INFO - PaddleOCR initialized successfully
+2026-02-22 08:22:30,899 - receipts.services.ocr_service - INFO - OCR parser initialized successfully
+2026-02-22 08:22:30,899 - receipts.api_views - INFO - Processing receipt 26
+2026-02-22 08:22:30,986 - receipts.services.ocr_service - INFO - Processing receipt image: /home/pseudouser/receipt_scanning_through_ocr/receipts/receipt.jpg
+2026-02-22 08:22:30,986 - receipt_scanning_through_ocr.ocr_more_lat - INFO - Starting receipt processing for: /home/pseudouser/receipt_scanning_through_ocr/receipts/receipt.jpg
+2026-02-22 08:22:52,273 - root - INFO - preprocessing completed in 19.538s
+2026-02-22 08:23:04,180 - root - INFO - select_best_ocr_result completed in 54.700s
+2026-02-22 08:23:04,244 - receipt_scanning_through_ocr.ocr_more_lat - WARNING - No text extracted from the image
+2026-02-22 08:23:04,244 - root - INFO - processing_receipt completed in 54.795s
+2026-02-22 08:23:04,245 - receipts.services.ocr_service - INFO - OCR processing completed successfully for: /home/pseudouser/receipt_scanning_through_ocr/receipts/receipt.jpg
+2026-02-22 08:23:06,115 - receipts.services.ocr_service - INFO - Receipt 26 updated with OCR data
+2026-02-22 08:23:06,115 - receipts.api_views - INFO - Receipt 26 processed successfully
+2026-02-22 08:23:58,092 - root - INFO - select_best_ocr_result completed in 87.085s
+2026-02-22 08:23:58,233 - receipt_scanning_through_ocr.ocr_more_lat - WARNING - No text extracted from the image
+2026-02-22 08:23:58,233 - root - INFO - processing_receipt completed in 87.247s
+2026-02-22 08:23:58,234 - receipts.services.ocr_service - INFO - OCR processing completed successfully for: /home/pseudouser/receipt_scanning_through_ocr/receipts/receipt.jpg
+2026-02-22 08:23:58,519 - receipts.services.ocr_service - INFO - Receipt 26 updated with OCR data
+2026-02-22 08:23:58,520 - receipts.api_views - INFO - Receipt 26 processed successfully
